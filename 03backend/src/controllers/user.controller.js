@@ -273,7 +273,7 @@ const updateUserAvatar= asyncHandler(async(req,res)=>{
         throw new ApiError(400,"Error while uploading")
     }
 
-    const user = User.findByIdAndUpdate(req.user?._id,
+    const user = await User.findByIdAndUpdate(req.user?._id,
         {
             $set:{
                 avatar:avatar.url
@@ -283,6 +283,8 @@ const updateUserAvatar= asyncHandler(async(req,res)=>{
             new:true
         }
     ).select("-password -refreshToken");
+
+    //TODO: delete old image
 
     return res.status(200).json(new ApiResponse(200,user,"Avatar updated successfully!"))
 })
